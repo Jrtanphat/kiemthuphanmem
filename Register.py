@@ -1,5 +1,6 @@
 import unittest
 import pytest
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -17,7 +18,7 @@ def driver():
     yield driver
     driver.quit()
 
-
+#function thực hiện đăng ký với biến tự động
 def register(driver, email, password, name, number, id, address, gender_value, date, role):
     driver.get("http://localhost/mongodb/sigup.php")
     time.sleep(3)
@@ -53,7 +54,7 @@ def register(driver, email, password, name, number, id, address, gender_value, d
     submit_button.click()
     time.sleep(3)
 
-#Pass
+#Pass_24.11s
 def test_register_valid_data(driver):
     email = "letanphat110@gmail.com"
     password = "123456"
@@ -77,9 +78,9 @@ def test_register_valid_data(driver):
         assert success_message is not None
     except TimeoutException:
         assert False, "Success message not found on the page after waiting."
-    time.sleep(3)
 
-#chức năng fail
+
+#Fail_16.68s
 def test_register_boundary_password(driver):
     email = "tanphat0@gmail.com"
     password = "1"
@@ -105,9 +106,9 @@ def test_register_boundary_password(driver):
         print("Kiểm tra thành công: Ở lại trang đăng ký và hiển thị thông báo lỗi.")
     except AssertionError as e:
         print(f"Lỗi kiểm tra: {str(e)}")
-    time.sleep(3)
 
-#chức năng fail
+
+#Fail_16.64s
 def test_register_invalid_email(driver):
     email = "ttp#.com"
     password = "123456"
@@ -133,9 +134,9 @@ def test_register_invalid_email(driver):
         assert alert_message is not None, "Alert message for invalid email format not displayed."
     except TimeoutException:
         assert False, "Expected alert message not found on the page after waiting."
-    time.sleep(3)
 
-#chuc nang fail
+
+#Fail_16.60s
 def test_register_blankinfo(driver):
     email = "tanpg@gmail.com"
     password = "123456"
@@ -163,9 +164,9 @@ def test_register_blankinfo(driver):
         assert alert_message is not None, "Alert message for blank information not displayed."
     except TimeoutException:
         assert False, "Expected alert message not found on the page after waiting."
-    time.sleep(3)
 
-#Pass
+
+#Pass_23.60s
 def test_register_registered_email(driver):
     email = "tanphatrey510@gmail.com"
     password = "123456"
@@ -185,9 +186,9 @@ def test_register_registered_email(driver):
 
     # Xác minh kết quả mong đợi
     assert "Email này đã được sử dụng" in driver.page_source
-    time.sleep(3)
 
-#chuc nang fail
+
+#Fail_16.63s
 def test_register_specialcharacter(driver):
     email = "!@#$%^&*()@gmail.com"
     password = "123456"
@@ -213,9 +214,9 @@ def test_register_specialcharacter(driver):
         assert alert_message is not None, "Alert message for invalid email format with special characters not displayed."
     except TimeoutException:
         assert False, "Expected alert message not found on the page after waiting."
-    time.sleep(3)
 
-#pass
+
+#Pass_24.13s
 def test_register_same_id(driver):
     email = "Jrtanphat@gmail.com"
     password = "123456"
@@ -237,7 +238,7 @@ def test_register_same_id(driver):
     # Chờ và kiểm tra thông báo "CCCD này đã được đăng ký trước đó"
     # Xác minh kết quả mong đợi
     assert "CCCD này đã được đăng ký trước đó" in driver.page_source
-    time.sleep(3)
+
 def login(driver):
 
     driver.get("http://localhost/mongodb/login.php")
@@ -251,7 +252,7 @@ def search_book(driver, search_query):
     login(driver)  # Hàm đăng nhập (giả sử bạn đã định nghĩa trước)
     time.sleep(3)
     driver.get("http://localhost/mongodb/admin.php")  # Đường dẫn đến trang quản trị
-    time.sleep(5)  # Chờ trang tải (khuyến nghị dùng WebDriverWait thay vì sleep)
+    time.sleep(3)  # Chờ trang tải (khuyến nghị dùng WebDriverWait thay vì sleep)
 
     # Tìm hộp tìm kiếm
     search_box = driver.find_element(By.NAME, "timkiem")
@@ -275,7 +276,7 @@ def search_book(driver, search_query):
         print("Fail: Không tìm thấy sách.")
         return []
 
-#pass
+#Pass_27.76s
 def test_search_book_valid(driver):
     word = "Học chơi free fire"
     result = search_book(driver, word)
@@ -285,19 +286,19 @@ def test_search_book_valid(driver):
     assert any(word.lower() in title.lower() for title in result), \
         f"Test failed: Không tìm thấy sách phù hợp với từ khóa '{word}'."
 
-#pass
+#Pass_27.23s
 def test_search_book_invalid(driver):
     word = "1234"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#pass
+#Pass_27.32s
 def test_search_book_with_nonexistent_keyword(driver):
     word = "NonExistentProduct123"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#pass
+#Pass_26.16s
 def test_search_with_uppercase_keyword(driver):
     word = "HỌC CHƠI FREE FIRE"
     result = search_book(driver, word)
@@ -307,35 +308,29 @@ def test_search_with_uppercase_keyword(driver):
     assert any(word.upper() in title.upper() for title in result), \
         f"Test failed: Không tìm thấy sách phù hợp với từ khóa '{word}'."
 
-#pass
+#Pass_25.61s
 def test_search_with_special_characters(driver):
     word = "H@c chơ! fr$$ fire"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#pass
+#Pass_25.66s
 def test_search_with_keyword_surrounded_by_whitespace(driver):
     word = "    Học chơi free fire    "
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#chucnangfail
+#Fail_23.31s
 def test_search_empty_characters(driver):
     word = ""
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
-
+#Function thực hiện trước khi test
 def search_book_by_filter(driver, filter_query):
     login(driver)  # Hàm đăng nhập (giả sử bạn đã định nghĩa trước)
     driver.get("http://localhost/mongodb/admin.php")  # Đường dẫn đến trang quản trị
-    time.sleep(3
-               )
+    time.sleep(3)
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.NAME, "ma_the_loai")))  # Đợi cho đến khi <select> hiển thị
 
@@ -351,6 +346,7 @@ def search_book_by_filter(driver, filter_query):
     books = driver.find_elements(By.CLASS_NAME, "product-card2")
     time.sleep(5)
 
+#in ra danh sách thông tin sách
     book_list = []
     for book in books:
         title = book.find_element(By.CLASS_NAME, "book-brand").text
@@ -366,17 +362,17 @@ def search_book_by_filter(driver, filter_query):
         })
 
     return book_list
-    time.sleep(5)
 
 # Kiểm tra lại trong hàm test của bạn
 
-#pass
+#Pass_25.25s
 def test_search_book_filter_category(driver):
-    filter_option = "1"  # Ví dụ: "3" là giá trị cần lọc (thể loại sách)
+    filter_option = "1"  # Ví dụ: "1" là giá trị cần lọc (thể loại sách_Giáo dục)
     result = search_book_by_filter(driver, filter_option)
     for book in result:
         print(book)
 
+#Function thực hiện trước khi test
 def add_book(driver,name,amount,des,author,language,year,pos,rank,cate,publisher,date_value):
     login(driver)
     driver.get("http://localhost/mongodb/admin.php")
@@ -385,6 +381,7 @@ def add_book(driver,name,amount,des,author,language,year,pos,rank,cate,publisher
     time.sleep(5)
     add_button.click()
 
+#thêm thông tin sách
     driver.find_element(By.ID, "name").send_keys(name) #ten sach
     driver.find_element(By.ID, "quantity").send_keys(amount)  # Số lượng
     driver.find_element(By.ID, "description").send_keys(des)  # Mô tả
@@ -400,23 +397,28 @@ def add_book(driver,name,amount,des,author,language,year,pos,rank,cate,publisher
     #chon gia tri select
     select_rank.select_by_value(rank)
 
+#chọn giá trị category
     category_value = driver.find_element(By.ID, "category")
     select_category = Select(category_value)
     select_category.select_by_value(cate)
     time.sleep(3)
 
+#chọn giá trị publisher
     publisher_value = driver.find_element(By.ID, "publisher")
     select_publisher = Select(publisher_value)
     select_publisher.select_by_value(publisher)
     time.sleep(3)
 
+#chọn giá trị date
     date_input = driver.find_element(By.ID, "date")
     date_input.clear()
     date_input.send_keys(date_value)
 
+#up ảnh
     upload_element = driver.find_element(By.ID, "image")
-    upload_element.send_keys("C:/Users/Lenovo/PycharmProjects/KiemthuPhanMem/DoAnCuoiKy/image/1.jpeg")
-    time.sleep(3)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(current_dir, 'image', '1.jpeg')
+    upload_element.send_keys(image_path)
 
     driver.find_element(By.CLASS_NAME, "submit-form").click()
     time.sleep(3)
@@ -439,7 +441,7 @@ def add_book(driver,name,amount,des,author,language,year,pos,rank,cate,publisher
     # Kiểm tra sản phẩm có tồn tại trong danh sách hay không
     assert product_found, "Sản phẩm không được thêm vào danh sách!"
 
-#pass
+#Pass_43.48s
 def test_add_book_valid_value(driver):
     name = "hi"
     amount = "5"
@@ -454,7 +456,7 @@ def test_add_book_valid_value(driver):
     date_value = "01/01/2020"
     add_book(driver, name, amount, des, author, language, year, pos, rank, cate, publisher, date_value)
 
-#chucnangfail
+#Fail_39.80s
 def test_add_book_blank_value(driver):
     name = ""
     amount = ""
@@ -473,7 +475,7 @@ def test_add_book_blank_value(driver):
     # Kiểm tra xem thông báo lỗi có xuất hiện trong page source hay không
     assert "Vui lòng điền đầy đủ thông tin" in page_source, "Thông báo lỗi không hiển thị"
 
-#chucnangfail
+#Fail_39.68s
 def test_add_book_missing_img(driver):
     name = "Testing"
     amount = "5"
@@ -523,10 +525,6 @@ def test_add_book_missing_img(driver):
     date_input.clear()
     date_input.send_keys(date_value)
 
-    # upload_element = driver.find_element(By.ID, "image")
-    # upload_element.send_keys("C:/Users/Lenovo/PycharmProjects/KiemthuPhanMem/DoAnCuoiKy/image/1.jpeg")
-    # time.sleep(3)
-
     driver.find_element(By.CLASS_NAME, "submit-form").click()
     time.sleep(3)
     page_source = driver.page_source
@@ -554,7 +552,7 @@ def test_add_book_missing_img(driver):
     product_list = driver.find_elements(By.XPATH, "//table[@id='product-list']//tr")
     assert not any(name in product.text for product in product_list), "Sản phẩm vẫn được thêm dù không có ảnh"
 
-#chucnangfail
+#Fail_40.05s
 def test_add_book_minus_amount(driver):
     name = "Testing2"
     amount = "-10"
@@ -575,19 +573,19 @@ def test_add_book_minus_amount(driver):
 def add_publisher(driver,name_pub,address,phone_num):
     login(driver)
     driver.get("http://localhost/mongodb/admin.php")
-    time.sleep(5)
+    time.sleep(2)
     add_pub_button = driver.find_element(By.XPATH, "/html/body/div[4]/div[1]/div/a[2]/button")
     add_pub_button.click()
-    time.sleep(5)
+    time.sleep(2)
     add_pub2_button = driver.find_element(By.ID, "new-user")
     add_pub2_button.click()
-    time.sleep(5)
+    time.sleep(2)
     driver.find_element(By.NAME, "name").send_keys(name_pub)
     driver.find_element(By.NAME, "address").send_keys(address)
     driver.find_element(By.NAME, "phone").send_keys(phone_num)
-    time.sleep(5)
+    time.sleep(2)
     driver.find_element(By.CLASS_NAME, "submit-form").click()
-    time.sleep(5)
+    time.sleep(2)
 
     table = driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/table")
     rows = table.find_elements(By.TAG_NAME, "tr")
@@ -600,14 +598,14 @@ def add_publisher(driver,name_pub,address,phone_num):
     print(f"Nhà xuất bản '{name_pub}' không có trong bảng.")
     return False
 
-#pass
+#Pass_41.34s
 def test_add_publisher_valid_value(driver):
     name = "LTP"
     address = "1041"
     phone_num = "123456"
     add_publisher(driver, name, address, phone_num)
 
-#chucnangfail
+#Fail_25.52s
 def test_add_publisher_blank_value(driver):
     name = ""
     address = "1041"
@@ -639,6 +637,7 @@ def update_publisher(driver, name, new_name, new_address, new_phone_num):
             time.sleep(5)
             break
 
+#nếu không tìm thấy nxb thì out, còn nếu có thì điền lại thông tin nhà xuất bản mới
     if not found_before_edit:
         print("Không tìm thấy nhà xuất bản cần sửa.")
         return
@@ -660,6 +659,7 @@ def update_publisher(driver, name, new_name, new_address, new_phone_num):
     table = driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/table")
     rows_after_edit = table.find_elements(By.TAG_NAME, "tr")
     found_after_edit = False
+#kiểm tra đã được update hay chưa
     for row in rows_after_edit:
         if new_name in row.text:
             found_after_edit = True
@@ -670,7 +670,7 @@ def update_publisher(driver, name, new_name, new_address, new_phone_num):
     else:
         print("Lỗi: Không thể sửa nhà xuất bản.")
 
-#pass
+#Pass_31.47s
 def test_update_publisher(driver):
     name = "LTP"  # Tên nhà xuất bản cần sửa
     new_name = "LTP New"  # Tên mới
@@ -692,7 +692,7 @@ def test_update_publisher(driver):
 
     assert found_after_edit, "Test failed: Không tìm thấy nhà xuất bản sau khi sửa!"
 
-#pass
+
 def delete_publisher(driver, name):
     login(driver)
     time.sleep(5)
@@ -747,7 +747,7 @@ def delete_publisher(driver, name):
                 print(f"Có lỗi xảy ra khi xóa: {e}")
                 return
 
-#pass
+#Pass_30.54s
 def test_del_publisher(driver):
     name = "LTP New"
     delete_publisher(driver, name)
@@ -755,7 +755,6 @@ def test_del_publisher(driver):
 def add_category(driver, id_cat, name):
     login(driver)
     driver.get("http://localhost/mongodb/admin.php")
-    time.sleep(5)
     cat_button = driver.find_element(By.XPATH, "/html/body/div[4]/div[1]/div/a[3]/button")
     cat_button.click()
     time.sleep(3)
@@ -778,13 +777,13 @@ def add_category(driver, id_cat, name):
     print(f"Thể loại sách '{name}' không có trong bảng.")
     return False
 
-#pass
+#Pass_33.73s
 def test_add_category(driver):
     id_cat = "5"
     name = "Testing"
     add_category(driver, id_cat, name)
 
-#chucnangfail
+#Fail_25.02s
 def test_add_blank_category(driver):
     id_cat = ""
     name = "Testing2"
@@ -840,7 +839,7 @@ def update_category(driver, id_cat, new_id_cat, new_name):
     else:
         print("Lỗi: Không thể sửa thể loại.")
 
-#pass
+#Pass_31.76s
 def test_update_category(driver):
     id_cat = "5"
     new_id_cat = "5 New"
@@ -913,12 +912,12 @@ def delete_category(driver, name):
                 print(f"Có lỗi xảy ra khi xóa: {e}")
                 return
 
-#pass
+#Pass_24.97s
 def test_del_category(driver):
     name = "Testing New"
     delete_category(driver, name)
 
-#pass
+#Pass_31.70s
 def test_watch_book_list(driver):
     login(driver)
     driver.get("http://localhost/mongodb/report.php")
@@ -976,7 +975,7 @@ def watch_list_penalize(driver,value):
     watch_button.click()
 
     
-#pass
+#Pass_36.59s
 def test_watch_list_penalize(driver):
     value = "1"
     watch_list_penalize(driver, value)
@@ -1018,7 +1017,7 @@ def watch_overall(driver, start_date, end_date):
     info_text = info_div_el.text
     print(f"Thông tin tổng quát: {info_text}")
 
-#pass
+#Pass_51.86s
 def test_watch_overall_valid_date(driver):
     start_date = "01/01/2020"
     end_date = "11/01/2024"
@@ -1027,7 +1026,7 @@ def test_watch_overall_valid_date(driver):
 
     watch_overall(driver, start_date, end_date)
 
-#chucnangfail
+#Fail_46.15s
 def test_watch_overall_invalid_date_range(driver):
     start_date = "01/01/2030"
     end_date = "01/01/2020"  # Ngày kết thúc trước ngày bắt đầu
@@ -1039,7 +1038,7 @@ def test_watch_overall_invalid_date_range(driver):
     except Exception as e:
         assert "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu" in str(e), f"Thông báo lỗi không khớp: {str(e)}"
 
-#chucnangfail
+#Fail_47.40s
 def test_watch_overall_invalid_date_format(driver):
     start_date = "2020-01-01"  # Định dạng sai
     end_date = "2024-11-01"  # Định dạng sai
