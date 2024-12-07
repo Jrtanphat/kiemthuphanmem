@@ -14,7 +14,7 @@ import random
 @pytest.mark.usefixtures("driver")
 @pytest.fixture
 def driver():
-    driver = webdriver.Edge()  # Change to your desired browser
+    driver = webdriver.Chrome()  # Change to your desired browser
     yield driver
     driver.quit()
 
@@ -54,7 +54,8 @@ def register(driver, email, password, name, number, id, address, gender_value, d
     submit_button.click()
     time.sleep(3)
 
-#Pass_24.11s
+#Pass_edge_24.11s _chorme_22.07s
+#TC05
 def test_register_valid_data(driver):
     email = "letanphat110@gmail.com"
     password = "123456"
@@ -80,7 +81,8 @@ def test_register_valid_data(driver):
         assert False, "Success message not found on the page after waiting."
 
 
-#Fail_16.68s
+#Fail_Edege_16.68s_Chorme_16.68s
+#TC06
 def test_register_boundary_password(driver):
     email = "tanphat0@gmail.com"
     password = "1"
@@ -108,7 +110,8 @@ def test_register_boundary_password(driver):
         print(f"Lỗi kiểm tra: {str(e)}")
 
 
-#Fail_16.64s
+#Fail_Edge_16.64s_Chorme_16.61s
+#TC07
 def test_register_invalid_email(driver):
     email = "ttp#.com"
     password = "123456"
@@ -136,7 +139,8 @@ def test_register_invalid_email(driver):
         assert False, "Expected alert message not found on the page after waiting."
 
 
-#Fail_16.60s
+#Fail_Edge_16.60s_Chorme_16.68s
+#TC_08
 def test_register_blankinfo(driver):
     email = "tanpg@gmail.com"
     password = "123456"
@@ -166,7 +170,8 @@ def test_register_blankinfo(driver):
         assert False, "Expected alert message not found on the page after waiting."
 
 
-#Pass_23.60s
+#Pass_Edge_23.60s_Chorme_20.61s
+#TC_09
 def test_register_registered_email(driver):
     email = "tanphatrey510@gmail.com"
     password = "123456"
@@ -188,7 +193,8 @@ def test_register_registered_email(driver):
     assert "Email này đã được sử dụng" in driver.page_source
 
 
-#Fail_16.63s
+#Fail_Edge_16.63s_Chorme_16.94s
+#TC_10
 def test_register_specialcharacter(driver):
     email = "!@#$%^&*()@gmail.com"
     password = "123456"
@@ -216,7 +222,8 @@ def test_register_specialcharacter(driver):
         assert False, "Expected alert message not found on the page after waiting."
 
 
-#Pass_24.13s
+#Pass_Edge_24.13s_Chorme_20.68s
+#TC_11
 def test_register_same_id(driver):
     email = "Jrtanphat@gmail.com"
     password = "123456"
@@ -276,7 +283,8 @@ def search_book(driver, search_query):
         print("Fail: Không tìm thấy sách.")
         return []
 
-#Pass_27.76s
+#Pass_Edge_27.76s_Chorme_24.85s
+#TC_12
 def test_search_book_valid(driver):
     word = "Học chơi free fire"
     result = search_book(driver, word)
@@ -286,19 +294,22 @@ def test_search_book_valid(driver):
     assert any(word.lower() in title.lower() for title in result), \
         f"Test failed: Không tìm thấy sách phù hợp với từ khóa '{word}'."
 
-#Pass_27.23s
+#Pass_Edge_27.23s_Chorme_24.73s
+#TC_13
 def test_search_book_invalid(driver):
     word = "1234"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#Pass_27.32s
+#Pass_Edge_27.32s_Chorme_25.54s
+#TC_14
 def test_search_book_with_nonexistent_keyword(driver):
     word = "NonExistentProduct123"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#Pass_26.16s
+#Pass_Edge_26.16s_Chorme_24.77s
+#TC_15
 def test_search_with_uppercase_keyword(driver):
     word = "HỌC CHƠI FREE FIRE"
     result = search_book(driver, word)
@@ -308,19 +319,22 @@ def test_search_with_uppercase_keyword(driver):
     assert any(word.upper() in title.upper() for title in result), \
         f"Test failed: Không tìm thấy sách phù hợp với từ khóa '{word}'."
 
-#Pass_25.61s
+#Pass_Edge_25.61s_Chorme_27.08s
+#TC_16
 def test_search_with_special_characters(driver):
     word = "H@c chơ! fr$$ fire"
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#Pass_25.66s
+#Pass_Edge_25.66s_Chorme_24.71s
+#TC_17
 def test_search_with_keyword_surrounded_by_whitespace(driver):
     word = "    Học chơi free fire    "
     result = search_book(driver, word)
     assert len(result) == 0, f"Test failed: Không tìm thấy sách với từ khóa '{word}', nhưng lại có kết quả."
 
-#Fail_23.31s
+#Fail_Edge_23.31s_Chorme_22.28s
+#TC_18
 def test_search_empty_characters(driver):
     word = ""
     result = search_book(driver, word)
@@ -365,7 +379,8 @@ def search_book_by_filter(driver, filter_query):
 
 # Kiểm tra lại trong hàm test của bạn
 
-#Pass_25.25s
+#Pass_Edge_25.25s_Chorme_24.36s
+#TC_19
 def test_search_book_filter_category(driver):
     filter_option = "1"  # Ví dụ: "1" là giá trị cần lọc (thể loại sách_Giáo dục)
     result = search_book_by_filter(driver, filter_option)
@@ -441,7 +456,8 @@ def add_book(driver,name,amount,des,author,language,year,pos,rank,cate,publisher
     # Kiểm tra sản phẩm có tồn tại trong danh sách hay không
     assert product_found, "Sản phẩm không được thêm vào danh sách!"
 
-#Pass_43.48s
+#Pass_Edge_43.48s_Chorme_43.92s
+#TC_20
 def test_add_book_valid_value(driver):
     name = "hi"
     amount = "5"
@@ -456,7 +472,8 @@ def test_add_book_valid_value(driver):
     date_value = "01/01/2020"
     add_book(driver, name, amount, des, author, language, year, pos, rank, cate, publisher, date_value)
 
-#Fail_39.80s
+#Fail_Edge_39.80s_Chorme_40.46s
+#TC_21
 def test_add_book_blank_value(driver):
     name = ""
     amount = ""
@@ -475,7 +492,8 @@ def test_add_book_blank_value(driver):
     # Kiểm tra xem thông báo lỗi có xuất hiện trong page source hay không
     assert "Vui lòng điền đầy đủ thông tin" in page_source, "Thông báo lỗi không hiển thị"
 
-#Fail_39.68s
+#Fail_Edge_39.68s_Chorme_40.58s
+#TC_22
 def test_add_book_missing_img(driver):
     name = "Testing"
     amount = "5"
@@ -552,7 +570,8 @@ def test_add_book_missing_img(driver):
     product_list = driver.find_elements(By.XPATH, "//table[@id='product-list']//tr")
     assert not any(name in product.text for product in product_list), "Sản phẩm vẫn được thêm dù không có ảnh"
 
-#Fail_40.05s
+#Fail_Edge_40.05s_Chorme_40.50s
+#TC_23
 def test_add_book_minus_amount(driver):
     name = "Testing2"
     amount = "-10"
@@ -598,14 +617,16 @@ def add_publisher(driver,name_pub,address,phone_num):
     print(f"Nhà xuất bản '{name_pub}' không có trong bảng.")
     return False
 
-#Pass_41.34s
+#Pass_Edge_26.91s_Chorme_26.46s
+#TC_24
 def test_add_publisher_valid_value(driver):
     name = "LTP"
     address = "1041"
     phone_num = "123456"
     add_publisher(driver, name, address, phone_num)
 
-#Fail_25.52s
+#Fail_Edge_25.52s_Chorme_26.05s
+#TC_25
 def test_add_publisher_blank_value(driver):
     name = ""
     address = "1041"
@@ -670,7 +691,8 @@ def update_publisher(driver, name, new_name, new_address, new_phone_num):
     else:
         print("Lỗi: Không thể sửa nhà xuất bản.")
 
-#Pass_31.47s
+#Pass_Edge_31.47s_Chorme_31.35s
+#TC_26
 def test_update_publisher(driver):
     name = "LTP"  # Tên nhà xuất bản cần sửa
     new_name = "LTP New"  # Tên mới
@@ -747,7 +769,8 @@ def delete_publisher(driver, name):
                 print(f"Có lỗi xảy ra khi xóa: {e}")
                 return
 
-#Pass_30.54s
+#Pass_Edge_30.54s_Chorme_30.36s
+#TC_27
 def test_del_publisher(driver):
     name = "LTP New"
     delete_publisher(driver, name)
@@ -777,13 +800,15 @@ def add_category(driver, id_cat, name):
     print(f"Thể loại sách '{name}' không có trong bảng.")
     return False
 
-#Pass_33.73s
+#Pass_Edge_33.73s_Chorme_28.39s
+#TC_28
 def test_add_category(driver):
     id_cat = "5"
     name = "Testing"
     add_category(driver, id_cat, name)
 
-#Fail_25.02s
+#Fail_Edge_25.02s_Chorme_25.60s
+#TC_29
 def test_add_blank_category(driver):
     id_cat = ""
     name = "Testing2"
@@ -839,7 +864,8 @@ def update_category(driver, id_cat, new_id_cat, new_name):
     else:
         print("Lỗi: Không thể sửa thể loại.")
 
-#Pass_31.76s
+#Pass_Edge_31.76s_chorme_31.30s
+#TC_30
 def test_update_category(driver):
     id_cat = "5"
     new_id_cat = "5 New"
@@ -912,12 +938,14 @@ def delete_category(driver, name):
                 print(f"Có lỗi xảy ra khi xóa: {e}")
                 return
 
-#Pass_24.97s
+#Pass_Edge_24.97s_Chorme_24.86s
+#TC_31
 def test_del_category(driver):
     name = "Testing New"
     delete_category(driver, name)
 
-#Pass_31.70s
+#Pass_Edge_31.70s_Chorme_35.69s
+#TC_32
 def test_watch_book_list(driver):
     login(driver)
     driver.get("http://localhost/mongodb/report.php")
@@ -975,7 +1003,8 @@ def watch_list_penalize(driver,value):
     watch_button.click()
 
     
-#Pass_36.59s
+#Pass_Edge_36.59s_Chorme_42.13s
+#TC_33
 def test_watch_list_penalize(driver):
     value = "1"
     watch_list_penalize(driver, value)
@@ -1017,7 +1046,8 @@ def watch_overall(driver, start_date, end_date):
     info_text = info_div_el.text
     print(f"Thông tin tổng quát: {info_text}")
 
-#Pass_51.86s
+#Pass_Edge_51.86s_Chorme_59.13s
+#TC_34
 def test_watch_overall_valid_date(driver):
     start_date = "01/01/2020"
     end_date = "11/01/2024"
@@ -1026,7 +1056,8 @@ def test_watch_overall_valid_date(driver):
 
     watch_overall(driver, start_date, end_date)
 
-#Fail_46.15s
+#Fail_Edge_46.15s_Chorme_53.76s
+#TC_35
 def test_watch_overall_invalid_date_range(driver):
     start_date = "01/01/2030"
     end_date = "01/01/2020"  # Ngày kết thúc trước ngày bắt đầu
@@ -1038,7 +1069,8 @@ def test_watch_overall_invalid_date_range(driver):
     except Exception as e:
         assert "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu" in str(e), f"Thông báo lỗi không khớp: {str(e)}"
 
-#Fail_47.40s
+#Fail_Edge_47.40s_Chorme_55.75s
+#TC_36
 def test_watch_overall_invalid_date_format(driver):
     start_date = "2020-01-01"  # Định dạng sai
     end_date = "2024-11-01"  # Định dạng sai
